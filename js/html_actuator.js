@@ -7,6 +7,11 @@ function HTMLActuator() {
   this.score = 0;
 }
 
+// Each tile value gets its own cat photo (see img/cats/CREDITS.md)
+HTMLActuator.catImage = function (value) {
+  return "img/cats/" + (value > 2048 ? "super" : value) + ".jpg";
+};
+
 HTMLActuator.prototype.actuate = function (grid, metadata) {
   var self = this;
 
@@ -62,7 +67,14 @@ HTMLActuator.prototype.addTile = function (tile) {
   this.applyClasses(wrapper, classes);
 
   inner.classList.add("tile-inner");
-  inner.textContent = tile.value;
+  var cat = document.createElement("span");
+  cat.classList.add("tile-cat");
+  cat.style.backgroundImage = "url(" + HTMLActuator.catImage(tile.value) + ")";
+  var number = document.createElement("span");
+  number.classList.add("tile-number");
+  number.textContent = tile.value;
+  inner.appendChild(cat);
+  inner.appendChild(number);
 
   if (tile.previousPosition) {
     // Make sure that the tile gets rendered in the previous position first
